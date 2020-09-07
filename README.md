@@ -1,2 +1,2 @@
-# podcast-api
+# Podcast API
 Alexandria podcast service
