@@ -17,6 +17,7 @@ package value
 import (
 	"github.com/alexandria-oss/common-go/exception"
 	"strings"
+	"time"
 )
 
 // File binary extension
@@ -24,7 +25,9 @@ type File struct {
 	// extension file extension
 	extension string
 	// byteLength file byte length
-	byteLength int64
+	byteLength uint64
+	// uploadTime file upload time
+	uploadTime time.Time
 }
 
 // GetExtension get file extension
@@ -33,15 +36,22 @@ func (f File) GetExtension() string {
 }
 
 // GetByteLength get file length in bytes
-func (f File) GetByteLength() int64 {
+func (f File) GetByteLength() uint64 {
 	return f.byteLength
+}
+
+// GetUploadTime get file upload time
+func (f File) GetUploadTime() time.Time {
+	return f.uploadTime
 }
 
 // SetExtension set file extension
 func (f *File) SetExtension(extension string) error {
+	memo := f.extension
 	f.extension = strings.ToLower(extension)
 
 	if err := f.IsExtensionValid(); err != nil {
+		f.extension = memo
 		return err
 	}
 
@@ -50,9 +60,29 @@ func (f *File) SetExtension(extension string) error {
 
 // SetByteLength set file length in bytes
 func (f *File) SetByteLength(length int64) error {
-	f.byteLength = length
+	// Avoid uint overflow
+	if length < 0 {
+		return exception.NewFieldRange("file_length", "1 MB", "500 MB")
+	}
+
+	memo := f.byteLength
+	f.byteLength = uint64(length)
 
 	if err := f.IsLengthValid(); err != nil {
+		f.byteLength = memo
+		return err
+	}
+
+	return nil
+}
+
+// SetUploadTime set file upload time
+func (f *File) SetUploadTime(uploadTime time.Time) error {
+	memo := f.uploadTime
+	f.uploadTime = uploadTime
+
+	if err := f.IsUploadTimeValid(); err != nil {
+		f.uploadTime = memo
 		return err
 	}
 
@@ -91,13 +121,23 @@ func (f File) IsExtensionValid() error {
 // IsLengthValid validate file byte length
 func (f File) IsLengthValid() error {
 	// Validation cases
-	// - Required
 	// - Byte length between 1 and 500 Mebibyte
 
 	// Mebibyte limit in bytes (500 MB)
-	byteLimit := int64(500 * 1048576)
-	if f.byteLength < 0 && f.byteLength > byteLimit {
+	byteLimit := uint64(524288000)
+	if f.byteLength < 0 || f.byteLength > byteLimit {
 		return exception.NewFieldRange("file_length", "1 MB", "500 MB")
+	}
+
+	return nil
+}
+
+func (f File) IsUploadTimeValid() error {
+	// Validation cases
+	// - Must be above 19th century (accept old radio programs as podcasts)
+
+	if f.uploadTime.Year() < 1900 {
+		return exception.NewFieldRange("upload_time", "1900 year", "n year")
 	}
 
 	return nil
