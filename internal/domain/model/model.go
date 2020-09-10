@@ -12,6 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package model
-
 // This package is meant to be used whenever a CQRS model (Read or Write) is needed
+package model
