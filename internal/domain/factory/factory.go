@@ -12,5 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This package is meant to be used whenever a CQRS model (Read or Write) is needed.
-package model
+// This package is meant to be used whenever a factory is needed.
+//
+// 	Methods for creating domain objects should delegate to a specialized Factory object
+// 	such that alternative implementations may be easily interchanged
+package factory

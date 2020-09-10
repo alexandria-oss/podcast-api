@@ -12,5 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This package is meant to be used whenever a CQRS model (Read or Write) is needed.
-package model
+// This package is meant to be used whenever an domain/integration event is needed.
+// 	A domain object that defines an event (something that happens).
+//
+//	- A domain event is an event that domain experts care about.
+//
+// 	- An integration event is an event that traces transactions
+package event

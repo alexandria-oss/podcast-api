@@ -12,5 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This package is meant to be used whenever a CQRS model (Read or Write) is needed.
-package model
+// This package is meant to be used whenever a value object is needed.
+//
+// 	An object that contains attributes but has no conceptual identity. They should be treated as immutable
+package value

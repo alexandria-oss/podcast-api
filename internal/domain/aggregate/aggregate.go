@@ -12,5 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This package is meant to be used whenever a CQRS model (Read or Write) is needed.
-package model
+// This package is meant to be used whenever an aggregate root is needed.
+//
+// 	A collection of objects that are bound together by a root entity, otherwise known as
+// 	an aggregate root. The aggregate root guarantees the consistency of changes being made within
+// 	the aggregate by forbidding external objects from holding references to its members
+package aggregate
