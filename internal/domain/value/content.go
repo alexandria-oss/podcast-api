@@ -21,12 +21,66 @@ import (
 
 // Content holds external content attributes
 type Content struct {
-	// Cover image url
+	// cover image url
 	cover string
-	// Canvas image or small loop-video background url
+	// canvas image or small loop-video background url
 	canvas string
-	// ContentURL media url
+	// contentURL media url
 	contentURL string
+}
+
+// GetCover get cover url
+func (c Content) GetCover() string {
+	return c.cover
+}
+
+// GetCanvas get canvas url
+func (c Content) GetCanvas() string {
+	return c.canvas
+}
+
+// GetContentURL get content url
+func (c Content) GetContentURL() string {
+	return c.contentURL
+}
+
+// SetCover set cover url
+func (c *Content) SetCover(cover string) error {
+	memo := c.cover
+	c.cover = cover
+
+	if err := c.IsCoverValid(); err != nil {
+		c.cover = memo
+		return err
+	}
+
+	return nil
+}
+
+// SetCanvas set canvas url
+func (c *Content) SetCanvas(canvas string) error {
+	memo := c.canvas
+	c.canvas = canvas
+
+	if err := c.IsCanvasValid(); err != nil {
+		c.canvas = memo
+		return err
+	}
+
+	return nil
+}
+
+// SetContentURL set content url
+func (c *Content) SetContentURL(content string) error {
+	memo := c.contentURL
+	c.contentURL = content
+
+	if err := c.IsContentURLValid(); err != nil {
+		c.contentURL = memo
+		return err
+	}
+
+	return nil
 }
 
 // Validators
@@ -38,20 +92,20 @@ func (c Content) IsCoverValid() error {
 	// - HTTPS only
 	// - URL length standard (2-2048 characters)
 	// - Image extension .jpg, .jpeg, .png and .webp only
+	field := "cover"
 	if c.cover != "" {
-		if !strings.HasPrefix(c.cover, "https://") {
-			return exception.NewFieldFormat("cover", "HTTPS link")
-		} else if len(c.cover) < 2 && len(c.cover) > 2048 {
-			return exception.NewFieldRange("cover", "2 characters", "2048 characters")
-		} else if !strings.HasSuffix(c.cover, ".jpg") && !strings.HasSuffix(c.cover, ".jpeg") &&
-			!strings.HasSuffix(c.cover, ".png") && !strings.HasSuffix(c.cover, ".webp") {
-			return exception.NewFieldFormat("cover", ".jpg, .jpeg, .png or .webp file extension")
+		if err := c.validateLink(field, c.cover); err != nil {
+			return err
+		} else if !strings.HasSuffix(c.cover, ".jpg") &&
+			!strings.HasSuffix(c.cover, ".jpeg") && !strings.HasSuffix(c.cover, ".png") &&
+			!strings.HasSuffix(c.cover, ".webp") {
+			return exception.NewFieldFormat(field, ".jpg, .jpeg, .png or .webp file extension")
 		}
 
 		return nil
 	}
 
-	return exception.NewRequiredField("cover")
+	return exception.NewRequiredField(field)
 }
 
 // IsCanvasValid validate canvas external URL
@@ -60,18 +114,52 @@ func (c Content) IsCanvasValid() error {
 	// - HTTPS only
 	// - URL length standard (2-2048 characters)
 	// - Image/Video extension .jpg, .jpeg, .png, .webp and .mp4 only
-	if c.cover != "" {
-		if !strings.HasPrefix(c.cover, "https://") {
-			return exception.NewFieldFormat("canvas", "HTTPS link")
-		} else if len(c.cover) < 2 && len(c.cover) > 2048 {
-			return exception.NewFieldRange("canvas", "2 characters", "2048 characters")
-		} else if !strings.HasSuffix(c.cover, ".jpg") && !strings.HasSuffix(c.cover, ".jpeg") &&
-			!strings.HasSuffix(c.cover, ".png") && !strings.HasSuffix(c.cover, ".webp") {
-			return exception.NewFieldFormat("canvas", ".jpg, .jpeg, .png or .webp file extension")
+	field := "canvas"
+	if c.canvas != "" {
+		if err := c.validateLink(field, c.canvas); err != nil {
+			return err
+		} else if !strings.HasSuffix(c.canvas, ".jpg") &&
+			!strings.HasSuffix(c.canvas, ".jpeg") &&
+			!strings.HasSuffix(c.canvas, ".png") && !strings.HasSuffix(c.canvas, ".webp") &&
+			!strings.HasSuffix(c.canvas, ".mp4") {
+			return exception.NewFieldFormat(field, ".jpg, .jpeg, .png or .webp file extension")
+		}
+	}
+
+	return nil
+}
+
+// IsContentURLValid validate content external URL
+func (c Content) IsContentURLValid() error {
+	// Validation cases
+	// - Required
+	// - HTTPS only
+	// - URL length standard (2-2048 characters)
+	// - Audio extension .mp3 and .flac only
+	field := "content_url"
+	if c.contentURL != "" {
+		if err := c.validateLink(field, c.contentURL); err != nil {
+			return err
+		} else if !strings.HasSuffix(c.contentURL, ".mp3") &&
+			!strings.HasSuffix(c.contentURL, ".flac") {
+			return exception.NewFieldFormat(field, ".mp3 or .flac file extension")
 		}
 
 		return nil
 	}
 
-	return exception.NewRequiredField("canvas")
+	return exception.NewRequiredField(field)
+}
+
+func (Content) validateLink(field, value string) error {
+	// Validation cases
+	// - HTTPS only
+	// - URL length standard (2-2048 characters)
+	if !strings.HasPrefix(value, "https://") {
+		return exception.NewFieldFormat(field, "HTTPS link")
+	} else if len(value) <= 2 || len(value) >= 2048 {
+		return exception.NewFieldRange(field, "2 characters", "2048 characters")
+	}
+
+	return nil
 }
