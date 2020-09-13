@@ -9,11 +9,17 @@ import (
 func TestKeyword_SetKeyword(t *testing.T) {
 	k := new(Keyword)
 
-	if err := k.SetKeyword(""); !errors.Is(err, exception.RequiredField) {
-		t.Error("invalid keyword validation, expected error")
+	// Populate fake keyword
+	str := ""
+	for i := 0; i < 129; i++ {
+		str += "x"
+	}
+
+	if err := k.SetKeyword(str); !errors.Is(err, exception.FieldRange) {
+		t.Error("keyword", "invalid keyword validation, expected error")
 	}
 
 	if err := k.SetKeyword("quantum"); err != nil {
-		t.Error("invalid keyword validation, expected nil error")
+		t.Error("keyword", "invalid keyword validation, expected nil error")
 	}
 }

@@ -45,10 +45,12 @@ func (k *Keyword) SetKeyword(keyword string) error {
 // IsKeywordValid validate current keyword value
 func (k Keyword) IsKeywordValid() error {
 	// Validation cases
-	// - Required
+	// - Range from 1 to 128
 
-	if k.value == "" {
-		return exception.NewRequiredField("keyword")
+	if k.value != "" {
+		if len(k.value) > 128 {
+			return exception.NewFieldRange("keyword", "1", "128")
+		}
 	}
 
 	return nil
