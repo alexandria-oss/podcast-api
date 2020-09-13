@@ -11,8 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package domain
 
-// RFC3339Micro RFC UNIX time layout with only date
-//
-const RFC3339Micro = "2006-01-02"
+// This package is meant to be used whenever a shared module is required
+package shared
