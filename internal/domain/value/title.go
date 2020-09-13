@@ -50,8 +50,10 @@ func (t Title) IsValid() error {
 	// Validation cases
 	// - Range from 1 to 512
 
-	if len(t.value) < 1 || len(t.value) > 512 {
-		return exception.NewFieldRange("title", "1", "512")
+	if t.value != "" {
+		if len(t.value) > 512 {
+			return exception.NewFieldRange("title", "1", "512")
+		}
 	}
 
 	return nil
