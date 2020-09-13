@@ -13,9 +13,7 @@
 // limitations under the License.
 package value
 
-import "github.com/alexandria-oss/common-go/exception"
-
-// ID unique identifier
+// ID generic unique identifier
 type ID struct {
 	value string
 }
@@ -27,25 +25,6 @@ func (i ID) Get() string {
 
 // Set override unique identifier value
 func (i *ID) Set(id string) error {
-	memo := i.value
 	i.value = id
-
-	if err := i.IsValid(); err != nil {
-		i.value = memo
-		return err
-	}
-
-	return nil
-}
-
-// IsValid verify unique identifier
-func (i ID) IsValid() error {
-	// Validation cases
-	// - Required
-
-	if i.value == "" {
-		return exception.NewRequiredField("id")
-	}
-
 	return nil
 }
