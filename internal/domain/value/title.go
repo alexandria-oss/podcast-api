@@ -27,6 +27,7 @@ type Title struct {
 // Set uniquely set title value (not mutable after first set)
 func (t *Title) Set(title string) error {
 	// Avoid mutations
+	// TODO: Add NotMutable domain exception
 	if t.value != "" {
 		return exception.NewAlreadyExists("title")
 	}
