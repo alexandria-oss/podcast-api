@@ -16,6 +16,7 @@ package value
 
 import (
 	"github.com/alexandria-oss/common-go/exception"
+	"github.com/alexandria-oss/podcast-api/internal/domain/service"
 	"strings"
 )
 
@@ -88,13 +89,12 @@ func (c *Content) SetContentURL(content string) error {
 // IsCoverValid validate cover external URL
 func (c Content) IsCoverValid() error {
 	// Validation cases
-	// - Required
 	// - HTTPS only
 	// - URL length standard (2-2048 characters)
 	// - Image extension .jpg, .jpeg, .png and .webp only
 	field := "cover"
 	if c.cover != "" {
-		if err := c.validateLink(field, c.cover); err != nil {
+		if err := service.ValidateURLLength(field, c.cover); err != nil {
 			return err
 		} else if !strings.HasSuffix(c.cover, ".jpg") &&
 			!strings.HasSuffix(c.cover, ".jpeg") && !strings.HasSuffix(c.cover, ".png") &&
@@ -105,7 +105,7 @@ func (c Content) IsCoverValid() error {
 		return nil
 	}
 
-	return exception.NewRequiredField(field)
+	return nil
 }
 
 // IsCanvasValid validate canvas external URL
@@ -116,7 +116,7 @@ func (c Content) IsCanvasValid() error {
 	// - Image/Video extension .jpg, .jpeg, .png, .webp and .mp4 only
 	field := "canvas"
 	if c.canvas != "" {
-		if err := c.validateLink(field, c.canvas); err != nil {
+		if err := service.ValidateURLLength(field, c.canvas); err != nil {
 			return err
 		} else if !strings.HasSuffix(c.canvas, ".jpg") &&
 			!strings.HasSuffix(c.canvas, ".jpeg") &&
@@ -132,13 +132,12 @@ func (c Content) IsCanvasValid() error {
 // IsContentURLValid validate content external URL
 func (c Content) IsContentURLValid() error {
 	// Validation cases
-	// - Required
 	// - HTTPS only
 	// - URL length standard (2-2048 characters)
 	// - Audio extension .mp3 and .flac only
 	field := "content_url"
 	if c.contentURL != "" {
-		if err := c.validateLink(field, c.contentURL); err != nil {
+		if err := service.ValidateURLLength(field, c.contentURL); err != nil {
 			return err
 		} else if !strings.HasSuffix(c.contentURL, ".mp3") &&
 			!strings.HasSuffix(c.contentURL, ".flac") {
@@ -146,19 +145,6 @@ func (c Content) IsContentURLValid() error {
 		}
 
 		return nil
-	}
-
-	return exception.NewRequiredField(field)
-}
-
-func (Content) validateLink(field, value string) error {
-	// Validation cases
-	// - HTTPS only
-	// - URL length standard (2-2048 characters)
-	if !strings.HasPrefix(value, "https://") {
-		return exception.NewFieldFormat(field, "HTTPS link")
-	} else if len(value) <= 2 || len(value) >= 2048 {
-		return exception.NewFieldRange(field, "2 characters", "2048 characters")
 	}
 
 	return nil

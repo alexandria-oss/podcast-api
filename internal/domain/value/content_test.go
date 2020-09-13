@@ -9,11 +9,6 @@ import (
 func TestContent_SetCanvas(t *testing.T) {
 	c := new(Content)
 
-	// 	Empty
-	if err := c.SetCanvas(""); err != nil {
-		t.Error("invalid content set canvas validation, expected nil error")
-	}
-
 	// Non-SSL secured site
 	if err := c.SetCanvas("http://domain.com/pics/123.jpg"); !errors.Is(err, exception.FieldFormat) {
 		t.Error("invalid content set canvas validation, expected error")
@@ -43,11 +38,6 @@ func TestContent_SetCanvas(t *testing.T) {
 func TestContent_SetCover(t *testing.T) {
 	c := new(Content)
 
-	// 	Empty
-	if err := c.SetCover(""); !errors.Is(err, exception.RequiredField) {
-		t.Error("invalid content set cover validation, expected error")
-	}
-
 	// Non-SSL secured site
 	if err := c.SetCover("http://domain.com/pics/123.jpg"); !errors.Is(err, exception.FieldFormat) {
 		t.Error("invalid content set cover validation, expected error")
@@ -76,11 +66,6 @@ func TestContent_SetCover(t *testing.T) {
 
 func TestContent_SetContentURL(t *testing.T) {
 	c := new(Content)
-
-	// 	Empty
-	if err := c.SetContentURL(""); !errors.Is(err, exception.RequiredField) {
-		t.Error("invalid content set content_url validation, expected error")
-	}
 
 	// Non-SSL secured site
 	if err := c.SetContentURL("http://domain.com/pics/123.jpg"); !errors.Is(err, exception.FieldFormat) {
