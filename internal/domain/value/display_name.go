@@ -41,7 +41,6 @@ func (d *DisplayName) Set(displayName string) error {
 // IsValid verify display name
 func (d DisplayName) IsValid() error {
 	// Validation cases
-	// - Required
 	// - Range from 1 to 256
 
 	if d.value != "" {
@@ -52,5 +51,5 @@ func (d DisplayName) IsValid() error {
 		return nil
 	}
 
-	return exception.NewRequiredField("display_name")
+	return nil
 }

@@ -9,10 +9,6 @@ import (
 func TestDisplayName_Set(t *testing.T) {
 	display := new(DisplayName)
 
-	if err := display.Set(""); !errors.Is(err, exception.RequiredField) {
-		t.Error("invalid display name validation, expected error")
-	}
-
 	// Populate fake data
 	str := ""
 	for i := 0; i < 257; i++ {
