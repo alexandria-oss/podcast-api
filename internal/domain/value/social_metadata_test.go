@@ -142,3 +142,19 @@ func TestSocialMetadata_CalculateLikeness(t *testing.T) {
 		t.Error("invalid social metadata likeness ratio validation, expected 50%")
 	}
 }
+
+func TestSocialMetadata_SetLikenessRatio(t *testing.T) {
+	s := new(SocialMetadata)
+
+	if err := s.SetLikenessRatio(-1); !errors.Is(err, exception.FieldRange) {
+		t.Error("likeness_ratio", "invalid social metadata likeness ratio validation, expected error")
+	}
+
+	if err := s.SetLikenessRatio(101); !errors.Is(err, exception.FieldRange) {
+		t.Error("likeness_ratio", "invalid social metadata likeness ratio validation, expected error")
+	}
+
+	if err := s.SetLikenessRatio(99); err != nil {
+		t.Error("likeness_ratio", "invalid social metadata likeness ratio validation, expected nil error")
+	}
+}

@@ -124,3 +124,13 @@ func (s *SocialMetadata) CalculateLikeness() {
 func (s SocialMetadata) GetLikenessRatio() float64 {
 	return s.likenessRatio
 }
+
+// SetLikenessRatio set likeness ratio
+func (s *SocialMetadata) SetLikenessRatio(delta float64) error {
+	if delta < 0 || delta > 100 {
+		return exception.NewFieldRange("likeness_ratio", "0", "100")
+	}
+
+	s.likenessRatio = delta
+	return nil
+}
