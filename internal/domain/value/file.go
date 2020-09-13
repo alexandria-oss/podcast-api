@@ -1,7 +1,7 @@
 // Copyright 2020 The Alexandria Foundation
 //
 // Licensed under the GNU Affero General Public License, Version 3.0 (the "License");
-// you may not use this file except in compliance with the License.
+// you may not use this FileMetadata except in compliance with the License.
 // You may obtain a copy of the License at
 //
 //      https://www.gnu.org/licenses/agpl-3.0.en.html
@@ -20,33 +20,33 @@ import (
 	"time"
 )
 
-// File binary extension
-type File struct {
-	// extension file extension
+// FileMetadata binary extension
+type FileMetadata struct {
+	// extension FileMetadata extension
 	extension string
-	// byteLength file byte length
+	// byteLength FileMetadata byte length
 	byteLength uint64
-	// uploadTime file upload time
+	// uploadTime FileMetadata upload time
 	uploadTime time.Time
 }
 
-// GetExtension get file extension
-func (f File) GetExtension() string {
+// GetExtension get FileMetadata extension
+func (f FileMetadata) GetExtension() string {
 	return f.extension
 }
 
-// GetByteLength get file length in bytes
-func (f File) GetByteLength() uint64 {
+// GetByteLength get FileMetadata length in bytes
+func (f FileMetadata) GetByteLength() uint64 {
 	return f.byteLength
 }
 
-// GetUploadTime get file upload time
-func (f File) GetUploadTime() time.Time {
+// GetUploadTime get FileMetadata upload time
+func (f FileMetadata) GetUploadTime() time.Time {
 	return f.uploadTime
 }
 
-// SetExtension set file extension
-func (f *File) SetExtension(extension string) error {
+// SetExtension set FileMetadata extension
+func (f *FileMetadata) SetExtension(extension string) error {
 	memo := f.extension
 	f.extension = strings.ToLower(extension)
 
@@ -58,11 +58,11 @@ func (f *File) SetExtension(extension string) error {
 	return nil
 }
 
-// SetByteLength set file length in bytes
-func (f *File) SetByteLength(length int64) error {
+// SetByteLength set FileMetadata length in bytes
+func (f *FileMetadata) SetByteLength(length int64) error {
 	// Avoid uint overflow
 	if length < 0 {
-		return exception.NewFieldRange("file_length", "1 MB", "500 MB")
+		return exception.NewFieldRange("FileMetadata_length", "1 MB", "500 MB")
 	}
 
 	memo := f.byteLength
@@ -76,8 +76,8 @@ func (f *File) SetByteLength(length int64) error {
 	return nil
 }
 
-// SetUploadTime set file upload time
-func (f *File) SetUploadTime(uploadTime time.Time) error {
+// SetUploadTime set FileMetadata upload time
+func (f *FileMetadata) SetUploadTime(uploadTime time.Time) error {
 	memo := f.uploadTime
 	f.uploadTime = uploadTime
 
@@ -92,7 +92,7 @@ func (f *File) SetUploadTime(uploadTime time.Time) error {
 // Validators
 
 // IsValid validate overall values
-func (f File) IsValid() error {
+func (f FileMetadata) IsValid() error {
 	if err := f.IsExtensionValid(); err != nil {
 		return err
 	} else if err := f.IsLengthValid(); err != nil {
@@ -102,37 +102,37 @@ func (f File) IsValid() error {
 	return nil
 }
 
-// IsExtensionValid validate file extension
-func (f File) IsExtensionValid() error {
+// IsExtensionValid validate FileMetadata extension
+func (f FileMetadata) IsExtensionValid() error {
 	// Validation cases
 	// - Required
 	// - Audio extension .mp3 and .flac only
 	if f.extension != "" {
 		if f.extension != "mp3" && f.extension != "flac" {
-			return exception.NewFieldFormat("file_extension", "mp3 or flac")
+			return exception.NewFieldFormat("FileMetadata_extension", "mp3 or flac")
 		}
 
 		return nil
 	}
 
-	return exception.NewRequiredField("file_extension")
+	return exception.NewRequiredField("FileMetadata_extension")
 }
 
-// IsLengthValid validate file byte length
-func (f File) IsLengthValid() error {
+// IsLengthValid validate FileMetadata byte length
+func (f FileMetadata) IsLengthValid() error {
 	// Validation cases
 	// - Byte length between 1 and 500 Mebibyte
 
 	// Mebibyte limit in bytes (500 MB)
 	byteLimit := uint64(524288000)
 	if f.byteLength < 0 || f.byteLength > byteLimit {
-		return exception.NewFieldRange("file_length", "1 MB", "500 MB")
+		return exception.NewFieldRange("FileMetadata_length", "1 MB", "500 MB")
 	}
 
 	return nil
 }
 
-func (f File) IsUploadTimeValid() error {
+func (f FileMetadata) IsUploadTimeValid() error {
 	// Validation cases
 	// - Must be above 19th century (accept old radio programs as podcasts)
 
