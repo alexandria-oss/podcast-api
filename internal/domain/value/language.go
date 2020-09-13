@@ -43,7 +43,6 @@ func (l *Language) Set(lang string) error {
 // IsValid verify language
 func (l Language) IsValid() error {
 	// Validation cases
-	// - Required
 	// - Range 2 to 5 digit ("de" - "en-US")
 	// - Is supported and complies with ISO 639-2 language code standard
 
@@ -59,5 +58,5 @@ func (l Language) IsValid() error {
 		return exception.NewFieldFormat("language", "ISO 639-2 (de, en-US)")
 	}
 
-	return exception.NewRequiredField("language")
+	return nil
 }

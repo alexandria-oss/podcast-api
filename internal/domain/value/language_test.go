@@ -9,10 +9,6 @@ import (
 func TestLanguage_Set(t *testing.T) {
 	lang := new(Language)
 
-	if err := lang.Set(""); !errors.Is(err, exception.RequiredField) {
-		t.Error("language", "invalid lang validation, expected error")
-	}
-
 	if err := lang.Set("a"); !errors.Is(err, exception.FieldRange) {
 		t.Error("language", "invalid lang validation, expected error")
 	}
