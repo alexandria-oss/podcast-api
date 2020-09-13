@@ -9,10 +9,6 @@ import (
 func TestTitle_Set(t *testing.T) {
 	title := new(Title)
 
-	if err := title.Set(""); !errors.Is(err, exception.FieldRange) {
-		t.Error("title", "invalid title validation, expected error")
-	}
-
 	// Populate fake title
 	str := ""
 	for i := 0; i < 513; i++ {
