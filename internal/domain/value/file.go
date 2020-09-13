@@ -105,7 +105,6 @@ func (f FileMetadata) IsValid() error {
 // IsExtensionValid validate FileMetadata extension
 func (f FileMetadata) IsExtensionValid() error {
 	// Validation cases
-	// - Required
 	// - Audio extension .mp3 and .flac only
 	if f.extension != "" {
 		if f.extension != "mp3" && f.extension != "flac" {
@@ -115,7 +114,7 @@ func (f FileMetadata) IsExtensionValid() error {
 		return nil
 	}
 
-	return exception.NewRequiredField("FileMetadata_extension")
+	return nil
 }
 
 // IsLengthValid validate FileMetadata byte length

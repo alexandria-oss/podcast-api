@@ -29,28 +29,19 @@ func TestFileMetadata_SetByteLength(t *testing.T) {
 func TestFileMetadata_SetExtension(t *testing.T) {
 	f := new(FileMetadata)
 
-	err := f.SetExtension("")
-	if !errors.Is(err, exception.RequiredField) {
+	if err := f.SetExtension("wav"); !errors.Is(err, exception.FieldFormat) {
 		t.Error("invalid FileMetadata extension validation, expected error")
 	}
 
-	err = f.SetExtension("wav")
-	if !errors.Is(err, exception.FieldFormat) {
+	if err := f.SetExtension(".mp3"); !errors.Is(err, exception.FieldFormat) {
 		t.Error("invalid FileMetadata extension validation, expected error")
 	}
 
-	err = f.SetExtension(".mp3")
-	if !errors.Is(err, exception.FieldFormat) {
-		t.Error("invalid FileMetadata extension validation, expected error")
-	}
-
-	err = f.SetExtension("mp3")
-	if err != nil {
+	if err := f.SetExtension("mp3"); err != nil {
 		t.Error("invalid FileMetadata extension validation, expected nil error")
 	}
 
-	err = f.SetExtension("flac")
-	if err != nil {
+	if err := f.SetExtension("flac"); err != nil {
 		t.Error("invalid FileMetadata extension validation, expected nil error")
 	}
 }
