@@ -15,7 +15,7 @@ package value
 
 import (
 	"github.com/alexandria-oss/common-go/exception"
-	"github.com/alexandria-oss/podcast-api/internal/domain"
+	"github.com/alexandria-oss/podcast-api/internal/domain/shared"
 	"time"
 )
 
@@ -54,7 +54,7 @@ func (m Metadata) IsCreateTimeValid() error {
 	if m.createTime.Before(time.Date(2020, time.January, 1, 0, 0,
 		0, 0, time.UTC)) || m.createTime.After(time.Now().UTC()) {
 		return exception.NewFieldRange("create_time", "2020-01-01",
-			time.Now().UTC().Format(domain.RFC3339Micro))
+			time.Now().UTC().Format(shared.RFC3339Micro))
 	}
 
 	return nil
@@ -85,7 +85,7 @@ func (m Metadata) IsUpdateTimeValid() error {
 	if m.updateTime.Before(time.Date(2020, time.January, 1, 0, 0,
 		0, 0, time.UTC)) || m.updateTime.After(time.Now().UTC()) {
 		return exception.NewFieldRange("update_time", "2020-01-01",
-			time.Now().UTC().Format(domain.RFC3339Micro))
+			time.Now().UTC().Format(shared.RFC3339Micro))
 	}
 
 	return nil
