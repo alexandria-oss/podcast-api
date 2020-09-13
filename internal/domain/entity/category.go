@@ -15,54 +15,46 @@
 package entity
 
 import (
+	"fmt"
 	"github.com/alexandria-oss/common-go/exception"
+	"github.com/alexandria-oss/podcast-api/internal/domain/shared/category"
 	"github.com/alexandria-oss/podcast-api/internal/domain/value"
-	"strings"
+	"strconv"
 )
 
+// Category classify an aggregate
 type Category struct {
-	// id foreign unique identifier
-	id *value.ID
-	// name denormalized category's name field
-	name string
+	// ID enum category unique identifier
+	ID *value.ID
+	// Name Category's display name
+	Name *value.Title
 }
 
-// GetID get category unique identifier
-func (c Category) GetID() string {
-	return c.id.Get()
-}
+// Set override category with an id
+func (c Category) Set(id int) error {
+	if name := category.GetDescription(id); name != "" {
+		if err := c.Name.Set(name); err != nil {
+			return err
+		}
 
-// GetName get category name
-func (c Category) GetName() string {
-	return c.name
-}
-
-// SetID set category unique identifier
-func (c *Category) SetID(id string) error {
-	return c.SetID(id)
-}
-
-// SetName set category name
-func (c *Category) SetName(name string) error {
-	mem := c.name
-
-	c.name = strings.Title(name)
-	if err := c.IsNameValid(); err != nil {
-		c.name = mem
-		return err
+		return c.ID.Set(strconv.FormatInt(int64(id), 10))
 	}
 
-	return nil
+	return exception.NewNotFound("category")
 }
 
-// Validators
+// MarshalString marshal category into string
+func (c Category) MarshalString() string {
+	return fmt.Sprintf("id: %s, name: %s", c.ID.Get(), c.Name.Get())
+}
 
-// IsNameValid validate category name
-func (c Category) IsNameValid() error {
+// IsValid verify category
+func (c Category) IsValid() error {
 	// Validation cases
-	// * Foreign data
-	// - Required
-	if c.name == "" {
+	// - Required: ID, Name
+	if c.ID.Get() == "" {
+		return exception.NewRequiredField("category_id")
+	} else if c.Name.Get() == "" {
 		return exception.NewRequiredField("category_name")
 	}
 

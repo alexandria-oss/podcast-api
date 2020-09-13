@@ -3,22 +3,29 @@ package entity
 import (
 	"errors"
 	"github.com/alexandria-oss/common-go/exception"
+	"github.com/alexandria-oss/podcast-api/internal/domain/value"
 	"testing"
 )
 
-func TestCategory_SetName(t *testing.T) {
-	c := new(Category)
-
-	err := c.SetName("")
-	if !errors.Is(err, exception.RequiredField) {
-		t.Error("invalid category set name validation, expected error")
+func TestCategory_Set(t *testing.T) {
+	c := &Category{
+		ID:   new(value.ID),
+		Name: new(value.Title),
 	}
 
-	err = c.SetName("quantum mechanics")
-	expStr := "Quantum Mechanics"
-	if err != nil {
-		t.Error("invalid category set name validation, expected nil error")
-	} else if c.GetName() != expStr {
-		t.Error("invalid category set name sanitization, expected " + expStr)
+	if err := c.Set(-1); !errors.Is(err, exception.NotFound) {
+		t.Error("category", "invalid category validation, expected error")
+	}
+
+	if err := c.Set(13); err != nil {
+		t.Error("category", "invalid category validation, expected nil error")
+	}
+
+	if c.ID.Get() != "13" {
+		t.Error("category", "invalid category validation, expected id 13")
+	}
+
+	if c.Name.Get() != "Sociology" {
+		t.Error("category", "invalid category validation, expected Sociology")
 	}
 }
