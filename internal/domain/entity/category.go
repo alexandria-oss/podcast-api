@@ -16,19 +16,20 @@ package entity
 
 import (
 	"github.com/alexandria-oss/common-go/exception"
+	"github.com/alexandria-oss/podcast-api/internal/domain/value"
 	"strings"
 )
 
 type Category struct {
 	// id foreign unique identifier
-	id string
+	id *value.ID
 	// name denormalized category's name field
 	name string
 }
 
 // GetID get category unique identifier
 func (c Category) GetID() string {
-	return c.id
+	return c.id.Get()
 }
 
 // GetName get category name
@@ -38,8 +39,7 @@ func (c Category) GetName() string {
 
 // SetID set category unique identifier
 func (c *Category) SetID(id string) error {
-	c.id = id
-	return nil
+	return c.SetID(id)
 }
 
 // SetName set category name
