@@ -37,7 +37,7 @@ func (c *Category) SetFieldNames() {
 }
 
 // Set override category with an id
-func (c Category) Set(id int) error {
+func (c *Category) Set(id int) error {
 	if name := category.GetName(id); name != "" {
 		if err := c.Name.Set(name); err != nil {
 			return err
