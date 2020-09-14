@@ -22,7 +22,7 @@ import (
 	"strconv"
 )
 
-// License brings policy access to users
+// License brings license to an aggregate
 type License struct {
 	ID   *value.ID
 	Name *value.DisplayName
@@ -34,7 +34,7 @@ func (v *License) SetFieldNames() {
 	v.Name.SetFieldName("license_name")
 }
 
-// Set override License policy with an id
+// Set override License with an id
 func (v *License) Set(id int) error {
 	if policy := license.GetName(id); policy != "" {
 		if err := v.Name.Set(policy); err != nil {
@@ -44,22 +44,22 @@ func (v *License) Set(id int) error {
 		return v.ID.Set(strconv.FormatInt(int64(id), 10))
 	}
 
-	return exception.NewNotFound("License")
+	return exception.NewNotFound("license")
 }
 
 // MarshalString marshal License into string
 func (v License) MarshalString() string {
-	return fmt.Sprintf("id: %s, policy: %s", v.ID.Get(), v.Name.Get())
+	return fmt.Sprintf("id: %s, name: %s", v.ID.Get(), v.Name.Get())
 }
 
 // IsValid verify License
 func (v License) IsValid() error {
 	// Validation cases
-	// - Required: ID, Policy
+	// - Required: ID, Name
 	if v.ID.Get() == "" {
 		return exception.NewRequiredField("License_id")
 	} else if v.Name.Get() == "" {
-		return exception.NewRequiredField("License_policy")
+		return exception.NewRequiredField("License_name")
 	}
 
 	// Value object
