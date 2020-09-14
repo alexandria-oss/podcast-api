@@ -52,7 +52,7 @@ func (k *Keyword) SetKeyword(keyword string) error {
 	memo := k.value
 
 	k.value = strings.ToLower(keyword)
-	if err := k.IsKeywordValid(); err != nil {
+	if err := k.IsValid(); err != nil {
 		k.value = memo
 		return err
 	}
@@ -60,8 +60,8 @@ func (k *Keyword) SetKeyword(keyword string) error {
 	return nil
 }
 
-// IsKeywordValid validate current keyword value
-func (k Keyword) IsKeywordValid() error {
+// IsValid validate current keyword value
+func (k Keyword) IsValid() error {
 	// Validation cases
 	// - Range from 1 to 128
 
