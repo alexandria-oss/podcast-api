@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/alexandria-oss/common-go v0.3.0-alpha
+	github.com/hashicorp/go-multierror v1.1.0
 	github.com/matoous/go-nanoid v1.4.1
 	golang.org/x/text v0.3.0
 )
