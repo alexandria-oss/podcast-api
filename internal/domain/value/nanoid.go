@@ -60,7 +60,7 @@ func (i *NanoID) Set(id string) error {
 }
 
 // Generate generate a new unique identifier
-func (i NanoID) Generate() error {
+func (i *NanoID) Generate() error {
 	id, err := gonanoid.Nanoid(16)
 	if err != nil {
 		return err
