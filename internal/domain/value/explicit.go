@@ -16,7 +16,25 @@ package value
 
 // Explicit verify whether an entity contains explicit content or not
 type Explicit struct {
-	value bool
+	value     bool
+	fieldName string
+}
+
+// SetFieldName override field name for top-operations
+func (e *Explicit) SetFieldName(field string) {
+	if field != "" {
+		e.fieldName = field
+	}
+}
+
+// GetFieldName get the struct field name
+func (e Explicit) GetFieldName() string {
+	if e.fieldName != "" {
+		return e.fieldName
+	}
+
+	// Default value
+	return "explicit"
 }
 
 // IsExplicit get if it contains explicit content
