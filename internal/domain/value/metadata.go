@@ -105,6 +105,7 @@ func (m *Metadata) SetState(state bool) {
 func (m *Metadata) ToggleState() {
 	if m.active {
 		m.active = false
+		return
 	}
 
 	m.active = true
