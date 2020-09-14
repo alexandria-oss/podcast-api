@@ -21,7 +21,25 @@ import (
 
 // Title heading of a document
 type Title struct {
-	value string
+	value     string
+	fieldName string
+}
+
+// SetFieldName override field name for top-operations
+func (t *Title) SetFieldName(field string) {
+	if field != "" {
+		t.fieldName = field
+	}
+}
+
+// GetFieldName get the url object field name
+func (t Title) GetFieldName() string {
+	if t.fieldName != "" {
+		return t.fieldName
+	}
+
+	// Default value
+	return "title"
 }
 
 // Set uniquely set title value (not mutable after first set)
@@ -29,7 +47,7 @@ func (t *Title) Set(title string) error {
 	// Avoid mutations
 	// TODO: Add NotMutable domain exception
 	if t.value != "" {
-		return exception.NewAlreadyExists("title")
+		return exception.NewAlreadyExists(t.GetFieldName())
 	}
 
 	t.value = strings.Title(title)
@@ -53,7 +71,7 @@ func (t Title) IsValid() error {
 
 	if t.value != "" {
 		if len(t.value) > 512 {
-			return exception.NewFieldRange("title", "1", "512")
+			return exception.NewFieldRange(t.GetFieldName(), "1", "512")
 		}
 	}
 

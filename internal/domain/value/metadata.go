@@ -26,7 +26,25 @@ type Metadata struct {
 	// updateTime update time timestamp
 	updateTime time.Time
 	// active content is available
-	active bool
+	active    bool
+	fieldName string
+}
+
+// SetFieldName override field name for top-operations
+func (m *Metadata) SetFieldName(field string) {
+	if field != "" {
+		m.fieldName = field
+	}
+}
+
+// GetFieldName get the url object field name
+func (m Metadata) GetFieldName() string {
+	if m.fieldName != "" {
+		return m.fieldName
+	}
+
+	// Default value
+	return "metadata"
 }
 
 // GetCreateTime get current create time
@@ -53,7 +71,7 @@ func (m Metadata) IsCreateTimeValid() error {
 	// - Future not valid
 	if m.createTime.Before(time.Date(2020, time.January, 1, 0, 0,
 		0, 0, time.UTC)) || m.createTime.After(time.Now().UTC()) {
-		return exception.NewFieldRange("create_time", "2020-01-01",
+		return exception.NewFieldRange(m.GetFieldName()+"_create_time", "2020-01-01",
 			time.Now().UTC().Format(shared.RFC3339Micro))
 	}
 
@@ -84,8 +102,19 @@ func (m Metadata) IsUpdateTimeValid() error {
 	// - Future not valid
 	if m.updateTime.Before(time.Date(2020, time.January, 1, 0, 0,
 		0, 0, time.UTC)) || m.updateTime.After(time.Now().UTC()) {
-		return exception.NewFieldRange("update_time", "2020-01-01",
+		return exception.NewFieldRange(m.GetFieldName()+"_update_time", "2020-01-01",
 			time.Now().UTC().Format(shared.RFC3339Micro))
+	}
+
+	return nil
+}
+
+// IsValid verify metadata
+func (m Metadata) IsValid() error {
+	if err := m.IsCreateTimeValid(); err != nil {
+		return err
+	} else if err := m.IsUpdateTimeValid(); err != nil {
+		return nil
 	}
 
 	return nil

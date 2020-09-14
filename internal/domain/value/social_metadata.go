@@ -28,12 +28,30 @@ type SocialMetadata struct {
 	totalNegativeReactions uint64
 	// likenessRatio social reaction percentage
 	likenessRatio float64
+	fieldName     string
+}
+
+// SetFieldName override field name for top-operations
+func (s *SocialMetadata) SetFieldName(field string) {
+	if field != "" {
+		s.fieldName = field
+	}
+}
+
+// GetFieldName get the url object field name
+func (s SocialMetadata) GetFieldName() string {
+	if s.fieldName != "" {
+		return s.fieldName
+	}
+
+	// Default value
+	return "social_metadata"
 }
 
 // SetTotalViews set total views counter
 func (s *SocialMetadata) SetTotalViews(delta int64) error {
 	if delta < 0 {
-		return exception.NewFieldRange("total_views", "0", "n")
+		return exception.NewFieldRange(s.GetFieldName()+"_total_views", "0", "n")
 	}
 
 	s.totalViews = uint64(delta)
@@ -60,7 +78,7 @@ func (s SocialMetadata) GetTotalViews() uint64 {
 // SetTotalPositiveReactions set total positive reactions counter
 func (s *SocialMetadata) SetTotalPositiveReactions(delta int64) error {
 	if delta < 0 {
-		return exception.NewFieldRange("total_positive_reactions", "0", "n")
+		return exception.NewFieldRange(s.GetFieldName()+"_total_positive_reactions", "0", "n")
 	}
 
 	s.totalPositiveReactions = uint64(delta)
@@ -87,7 +105,7 @@ func (s SocialMetadata) GetTotalPositiveReactions() uint64 {
 // SetTotalNegativeReactions set total negative reactions counter
 func (s *SocialMetadata) SetTotalNegativeReactions(delta int64) error {
 	if delta < 0 {
-		return exception.NewFieldRange("total_negative_reactions", "0", "n")
+		return exception.NewFieldRange(s.GetFieldName()+"_total_negative_reactions", "0", "n")
 	}
 
 	s.totalNegativeReactions = uint64(delta)
@@ -128,7 +146,7 @@ func (s SocialMetadata) GetLikenessRatio() float64 {
 // SetLikenessRatio set likeness ratio
 func (s *SocialMetadata) SetLikenessRatio(delta float64) error {
 	if delta < 0 || delta > 100 {
-		return exception.NewFieldRange("likeness_ratio", "0", "100")
+		return exception.NewFieldRange(s.GetFieldName()+"_likeness_ratio", "0", "100")
 	}
 
 	s.likenessRatio = delta

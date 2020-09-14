@@ -59,6 +59,7 @@ func (u ExternalMedia) GetFieldName() string {
 		return u.fieldName
 	}
 
+	// Default value
 	return "content_url"
 }
 
@@ -127,7 +128,7 @@ func (u ExternalMedia) IsValid() error {
 	// - HTTPS only
 	// - ExternalMedia length standard (2-2048 characters)
 	if u.url != "" {
-		if err := service.ValidateURLLength(u.GetFieldName(), u.url); err != nil {
+		if err := service.ValidateURLLength(u.GetFieldName(), u.url, true); err != nil {
 			return err
 		}
 

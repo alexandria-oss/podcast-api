@@ -15,7 +15,25 @@ package value
 
 // ID generic unique identifier
 type ID struct {
-	value string
+	value     string
+	fieldName string
+}
+
+// SetFieldName override field name for top-operations
+func (i *ID) SetFieldName(field string) {
+	if field != "" {
+		i.fieldName = field
+	}
+}
+
+// GetFieldName get the url object field name
+func (i ID) GetFieldName() string {
+	if i.fieldName != "" {
+		return i.fieldName
+	}
+
+	// Default value
+	return "id"
 }
 
 // Get get current unique identifier value

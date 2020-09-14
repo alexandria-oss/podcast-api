@@ -20,11 +20,11 @@ import (
 )
 
 // ValidateURLLength verify if the given URL complies with URL GET maximum length
-func ValidateURLLength(field, value string) error {
+func ValidateURLLength(field, value string, secure bool) error {
 	// Validation cases
-	// - HTTPS only
+	// - HTTPS only * if chosen
 	// - URL length standard (2-2048 characters)
-	if !strings.HasPrefix(value, "https://") {
+	if secure && !strings.HasPrefix(value, "https://") {
 		return exception.NewFieldFormat(field, "HTTPS link")
 	} else if len(value) <= 2 || len(value) >= 2048 {
 		return exception.NewFieldRange(field, "2 characters", "2048 characters")

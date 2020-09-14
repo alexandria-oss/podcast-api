@@ -17,7 +17,25 @@ import "github.com/alexandria-oss/common-go/exception"
 
 // DisplayName UI display text for title
 type DisplayName struct {
-	value string
+	value     string
+	fieldName string
+}
+
+// SetFieldName override field name for top-operations
+func (d *DisplayName) SetFieldName(field string) {
+	if field != "" {
+		d.fieldName = field
+	}
+}
+
+// GetFieldName get the url object field name
+func (d DisplayName) GetFieldName() string {
+	if d.fieldName != "" {
+		return d.fieldName
+	}
+
+	// Default value
+	return "display_name"
 }
 
 // Get get display name current value
@@ -45,7 +63,7 @@ func (d DisplayName) IsValid() error {
 
 	if d.value != "" {
 		if len(d.value) > 256 {
-			return exception.NewFieldRange("display_name", "1", "256")
+			return exception.NewFieldRange(d.GetFieldName(), "1", "256")
 		}
 
 		return nil

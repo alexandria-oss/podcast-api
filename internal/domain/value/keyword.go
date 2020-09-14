@@ -21,7 +21,25 @@ import (
 
 // Keyword words defined to properly filter data
 type Keyword struct {
-	value string
+	value     string
+	fieldName string
+}
+
+// SetFieldName override field name for top-operations
+func (k *Keyword) SetFieldName(field string) {
+	if field != "" {
+		k.fieldName = field
+	}
+}
+
+// GetFieldName get the url object field name
+func (k Keyword) GetFieldName() string {
+	if k.fieldName != "" {
+		return k.fieldName
+	}
+
+	// Default value
+	return "keyword"
 }
 
 // GetKeyword get the keyword value
@@ -49,7 +67,7 @@ func (k Keyword) IsKeywordValid() error {
 
 	if k.value != "" {
 		if len(k.value) > 128 {
-			return exception.NewFieldRange("keyword", "1", "128")
+			return exception.NewFieldRange(k.GetFieldName(), "1", "128")
 		}
 	}
 

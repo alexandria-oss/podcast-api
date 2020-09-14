@@ -28,6 +28,24 @@ type FileMetadata struct {
 	byteLength uint64
 	// uploadTime FileMetadata upload time
 	uploadTime time.Time
+	fieldName  string
+}
+
+// SetFieldName override field name for top-operations
+func (f *FileMetadata) SetFieldName(field string) {
+	if field != "" {
+		f.fieldName = field
+	}
+}
+
+// GetFieldName get the url object field name
+func (f FileMetadata) GetFieldName() string {
+	if f.fieldName != "" {
+		return f.fieldName
+	}
+
+	// Default value
+	return "file_metadata"
 }
 
 // GetExtension get FileMetadata extension
@@ -62,7 +80,7 @@ func (f *FileMetadata) SetExtension(extension string) error {
 func (f *FileMetadata) SetByteLength(length int64) error {
 	// Avoid uint overflow
 	if length < 0 {
-		return exception.NewFieldRange("FileMetadata_length", "1 MB", "500 MB")
+		return exception.NewFieldRange(f.GetFieldName()+"_byte_length", "1 MB", "500 MB")
 	}
 
 	memo := f.byteLength
@@ -108,7 +126,7 @@ func (f FileMetadata) IsExtensionValid() error {
 	// - Audio extension .mp3 and .flac only
 	if f.extension != "" {
 		if f.extension != "mp3" && f.extension != "flac" {
-			return exception.NewFieldFormat("FileMetadata_extension", "mp3 or flac")
+			return exception.NewFieldFormat(f.GetFieldName()+"_extension", "mp3 or flac")
 		}
 
 		return nil
@@ -125,7 +143,7 @@ func (f FileMetadata) IsLengthValid() error {
 	// Mebibyte limit in bytes (500 MB)
 	byteLimit := uint64(524288000)
 	if f.byteLength < 0 || f.byteLength > byteLimit {
-		return exception.NewFieldRange("FileMetadata_length", "1 MB", "500 MB")
+		return exception.NewFieldRange(f.GetFieldName()+"_byte_length", "1 MB", "500 MB")
 	}
 
 	return nil
@@ -136,7 +154,7 @@ func (f FileMetadata) IsUploadTimeValid() error {
 	// - Must be above 19th century (accept old radio programs as podcasts)
 
 	if f.uploadTime.Year() < 1900 {
-		return exception.NewFieldRange("upload_time", "1900 year", "n year")
+		return exception.NewFieldRange(f.GetFieldName()+"_upload_time", "1900 year", "n year")
 	}
 
 	return nil

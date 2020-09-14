@@ -19,7 +19,25 @@ import (
 )
 
 type Language struct {
-	value string
+	value     string
+	fieldName string
+}
+
+// SetFieldName override field name for top-operations
+func (l *Language) SetFieldName(field string) {
+	if field != "" {
+		l.fieldName = field
+	}
+}
+
+// GetFieldName get the url object field name
+func (l Language) GetFieldName() string {
+	if l.fieldName != "" {
+		return l.fieldName
+	}
+
+	// Default value
+	return "language"
 }
 
 // Get get language current value
@@ -48,14 +66,14 @@ func (l Language) IsValid() error {
 
 	if l.value != "" {
 		if len(l.value) < 2 || len(l.value) > 5 {
-			return exception.NewFieldRange("language", "2", "5")
+			return exception.NewFieldRange(l.GetFieldName(), "2", "5")
 		}
 
 		if shared.SupportedLangMap[l.value].String() != "und" {
 			return nil
 		}
 
-		return exception.NewFieldFormat("language", "ISO 639-2 (de, en-US)")
+		return exception.NewFieldFormat(l.GetFieldName(), "ISO 639-2 (de, en-US)")
 	}
 
 	return nil
