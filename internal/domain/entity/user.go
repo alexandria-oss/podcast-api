@@ -28,5 +28,14 @@ func (c User) IsValid() error {
 		return exception.NewRequiredField("user_id")
 	}
 
+	// Value Object
+	if err := c.DisplayName.IsValid(); err != nil {
+		return err
+	} else if c.Image != nil {
+		if errImg := c.Image.IsValid(); errImg != nil {
+			return errImg
+		}
+	}
+
 	return nil
 }
