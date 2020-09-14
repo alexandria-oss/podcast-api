@@ -16,3 +16,15 @@
 //
 // 	An object that contains attributes but has no conceptual identity. They should be treated as immutable
 package value
+
+// ValueObject an object that contains attributes but has no conceptual identity.
+// They should be treated as immutable
+//	This could be an abstract class with generics
+type ValueObject interface {
+	Get() interface{}
+	Set(value interface{}) error
+	IsValid() error
+
+	SetFieldName(field string)
+	GetFieldName() string
+}
