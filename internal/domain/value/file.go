@@ -21,6 +21,7 @@ import (
 )
 
 // FileMetadata binary extension
+// TODO: This value object belongs to File entity, Move this struct to Blob API
 type FileMetadata struct {
 	// extension FileMetadata extension
 	extension string
@@ -28,7 +29,8 @@ type FileMetadata struct {
 	byteLength uint64
 	// uploadTime FileMetadata upload time
 	uploadTime time.Time
-	fieldName  string
+	// fieldName value object name
+	fieldName string
 }
 
 // SetFieldName override field name for top-operations
@@ -149,6 +151,7 @@ func (f FileMetadata) IsLengthValid() error {
 	return nil
 }
 
+// IsUploadTimeValid verify FileMetadata upload time
 func (f FileMetadata) IsUploadTimeValid() error {
 	// Validation cases
 	// - Must be above 19th century (accept old radio programs as podcasts)
