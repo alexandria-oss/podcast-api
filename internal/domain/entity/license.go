@@ -1,0 +1,71 @@
+// Copyright 2020 The Alexandria Foundation
+//
+// Licensed under the GNU Affero General Public License, Version 3.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      https://www.gnu.org/licenses/agpl-3.0.en.html
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package entity
+
+import (
+	"fmt"
+	"github.com/alexandria-oss/common-go/exception"
+	"github.com/alexandria-oss/podcast-api/internal/domain/shared/license"
+	"github.com/alexandria-oss/podcast-api/internal/domain/value"
+	"strconv"
+)
+
+// License brings policy access to users
+type License struct {
+	ID   *value.ID
+	Name *value.DisplayName
+}
+
+// SetFieldNames set required custom field name(s)
+func (v *License) SetFieldNames() {
+	v.ID.SetFieldName("License_id")
+	v.Name.SetFieldName("license_name")
+}
+
+// Set override License policy with an id
+func (v *License) Set(id int) error {
+	if policy := license.GetName(id); policy != "" {
+		if err := v.Name.Set(policy); err != nil {
+			return err
+		}
+
+		return v.ID.Set(strconv.FormatInt(int64(id), 10))
+	}
+
+	return exception.NewNotFound("License")
+}
+
+// MarshalString marshal License into string
+func (v License) MarshalString() string {
+	return fmt.Sprintf("id: %s, policy: %s", v.ID.Get(), v.Name.Get())
+}
+
+// IsValid verify License
+func (v License) IsValid() error {
+	// Validation cases
+	// - Required: ID, Policy
+	if v.ID.Get() == "" {
+		return exception.NewRequiredField("License_id")
+	} else if v.Name.Get() == "" {
+		return exception.NewRequiredField("License_policy")
+	}
+
+	// Value object
+	if err := v.Name.IsValid(); err != nil {
+		return err
+	}
+
+	return nil
+}
