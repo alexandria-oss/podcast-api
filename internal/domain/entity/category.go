@@ -33,7 +33,7 @@ type Category struct {
 // SetFieldNames set required custom field name(s)
 func (c *Category) SetFieldNames() {
 	c.ID.SetFieldName("category_id")
-	c.Name.SetFieldName("name")
+	c.Name.SetFieldName("category_name")
 }
 
 // Set override category with an id
