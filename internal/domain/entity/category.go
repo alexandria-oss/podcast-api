@@ -30,9 +30,15 @@ type Category struct {
 	Name *value.Title
 }
 
+// SetFieldNames set required custom field name(s)
+func (c *Category) SetFieldNames() {
+	c.ID.SetFieldName("category_id")
+	c.Name.SetFieldName("name")
+}
+
 // Set override category with an id
 func (c Category) Set(id int) error {
-	if name := category.GetDescription(id); name != "" {
+	if name := category.GetName(id); name != "" {
 		if err := c.Name.Set(name); err != nil {
 			return err
 		}
@@ -56,6 +62,11 @@ func (c Category) IsValid() error {
 		return exception.NewRequiredField("category_id")
 	} else if c.Name.Get() == "" {
 		return exception.NewRequiredField("category_name")
+	}
+
+	// Value object
+	if err := c.Name.IsValid(); err != nil {
+		return err
 	}
 
 	return nil
