@@ -13,6 +13,5 @@
 // limitations under the License.
 package shared
 
-// RFC3339Micro RFC UNIX time layout with only date
-//
+// RFC3339Micro time.RFC3339 time layout with only date
 const RFC3339Micro = "2006-01-02"
