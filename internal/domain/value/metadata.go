@@ -30,6 +30,16 @@ type Metadata struct {
 	fieldName string
 }
 
+// NewMetadata auto-generate default metadata
+func NewMetadata() *Metadata {
+	return &Metadata{
+		createTime: time.Now(),
+		updateTime: time.Now(),
+		active:     true,
+		fieldName:  "",
+	}
+}
+
 // SetFieldName override field name for top-operations
 func (m *Metadata) SetFieldName(field string) {
 	if field != "" {

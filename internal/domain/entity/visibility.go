@@ -28,6 +28,11 @@ type Visibility struct {
 	Policy *value.DisplayName
 }
 
+// Start launch required operations
+func (v *Visibility) Start() {
+	v.SetFieldNames()
+}
+
 // SetFieldNames set required custom field name(s)
 func (v *Visibility) SetFieldNames() {
 	v.ID.SetFieldName("visibility_id")

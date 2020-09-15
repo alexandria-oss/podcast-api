@@ -30,6 +30,11 @@ type Category struct {
 	Name *value.Title
 }
 
+// Start launch required operations
+func (c *Category) Start() {
+	c.SetFieldNames()
+}
+
 // SetFieldNames set required custom field name(s)
 func (c *Category) SetFieldNames() {
 	c.ID.SetFieldName("category_id")

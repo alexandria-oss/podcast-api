@@ -28,42 +28,47 @@ type License struct {
 	Name *value.DisplayName
 }
 
+// Start launch required operations
+func (l *License) Start() {
+	l.SetFieldNames()
+}
+
 // SetFieldNames set required custom field name(s)
-func (v *License) SetFieldNames() {
-	v.ID.SetFieldName("License_id")
-	v.Name.SetFieldName("license_name")
+func (l *License) SetFieldNames() {
+	l.ID.SetFieldName("License_id")
+	l.Name.SetFieldName("license_name")
 }
 
 // Set override License with an id
-func (v *License) Set(id int) error {
+func (l *License) Set(id int) error {
 	if policy := license.GetName(id); policy != "" {
-		if err := v.Name.Set(policy); err != nil {
+		if err := l.Name.Set(policy); err != nil {
 			return err
 		}
 
-		return v.ID.Set(strconv.FormatInt(int64(id), 10))
+		return l.ID.Set(strconv.FormatInt(int64(id), 10))
 	}
 
 	return exception.NewNotFound("license")
 }
 
 // MarshalString marshal License into string
-func (v License) MarshalString() string {
-	return fmt.Sprintf("id: %s, name: %s", v.ID.Get(), v.Name.Get())
+func (l License) MarshalString() string {
+	return fmt.Sprintf("id: %s, name: %s", l.ID.Get(), l.Name.Get())
 }
 
 // IsValid verify License
-func (v License) IsValid() error {
+func (l License) IsValid() error {
 	// Validation cases
 	// - Required: ID, Name
-	if v.ID.Get() == "" {
-		return exception.NewRequiredField("License_id")
-	} else if v.Name.Get() == "" {
-		return exception.NewRequiredField("License_name")
+	if l.ID.Get() == "" {
+		return exception.NewRequiredField("license_id")
+	} else if l.Name.Get() == "" {
+		return exception.NewRequiredField("license_name")
 	}
 
 	// Value object
-	if err := v.Name.IsValid(); err != nil {
+	if err := l.Name.IsValid(); err != nil {
 		return err
 	}
 

@@ -60,6 +60,13 @@ type Media struct {
 	Social *value.SocialMetadata
 }
 
+// Start launch required operations
+func (m *Media) Start() {
+	m.SetFieldNames()
+	m.SetExternalMediaPolicy()
+	m.Metadata = value.NewMetadata()
+}
+
 // SetFieldNames set required custom field name(s)
 func (m *Media) SetFieldNames() {
 	m.InternalID.SetFieldName("internal_id")

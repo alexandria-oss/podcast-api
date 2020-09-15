@@ -14,6 +14,8 @@
 
 package entity
 
+import "github.com/alexandria-oss/podcast-api/internal/domain/value"
+
 // Podcast Podcasts entity
 type Podcast struct {
 	// RssID RSS feed item GUID
@@ -27,5 +29,18 @@ type Podcast struct {
 	// EpisodeType kind of episode
 	EpisodeType string
 	// Transcript content's transcript url
-	Transcript string
+	// 	Text extension .json only
+	Transcript *value.ExternalMedia
+	// ContentURL media url
+	// 	Audio extension .mp3 and .flac only
+	Content *value.ExternalMedia
+}
+
+// SetExternalMediaPolicy set external media business policies
+func (p *Podcast) SetExternalMediaPolicy() {
+	p.Transcript.SetFieldName("transcript_url")
+	p.Transcript.SetIsFile(false)
+
+	p.Content.SetIsFile(true)
+	p.Content.SetExtensions([]string{".mp3", ".flac"})
 }
