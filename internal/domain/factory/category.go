@@ -12,7 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package entity
+package factory
 
-type Channel struct {
+import (
+	"github.com/alexandria-oss/podcast-api/internal/domain/entity"
+	"github.com/alexandria-oss/podcast-api/internal/domain/value"
+)
+
+// NewCategoryEntity create a new category entity
+func NewCategoryEntity(categoryID int) (*entity.Category, error) {
+	category := &entity.Category{
+		ID:   new(value.ID),
+		Name: new(value.Title),
+	}
+	category.SetFieldNames()
+	if err := category.Set(categoryID); err != nil {
+		return nil, err
+	}
+
+	if err := category.IsValid(); err != nil {
+		return nil, err
+	}
+
+	return category, nil
 }

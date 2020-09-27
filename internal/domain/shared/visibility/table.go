@@ -12,7 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package entity
+package visibility
 
-type Channel struct {
+const (
+	Private = iota
+	Unlisted
+	Public
+)
+
+// GetName get visibility state name
+func GetName(visibilityID int) string {
+	switch visibilityID {
+	case 0:
+		return "PRIVATE"
+	case 1:
+		return "UNLISTED"
+	case 2:
+		return "PUBLIC"
+	default:
+		return ""
+	}
 }

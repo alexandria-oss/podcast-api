@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package entity
-
-type Channel struct {
-}
+// This package is meant to be used whenever an non-related operation is needed.
+//
+//	When an operation does not conceptually belong to any object. Following
+//	the natural contours of the problem, you can implement these operations in services.
+package service

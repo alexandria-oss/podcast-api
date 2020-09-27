@@ -11,8 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+package shared
 
-package entity
-
-type Channel struct {
-}
+// RFC3339Micro time.RFC3339 time layout with only date
+const RFC3339Micro = "2006-01-02"

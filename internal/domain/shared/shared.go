@@ -12,7 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package entity
-
-type Channel struct {
-}
+// This package is meant to be used whenever a shared module is required
+package shared

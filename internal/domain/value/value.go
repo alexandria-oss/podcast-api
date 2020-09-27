@@ -12,7 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package entity
+// This package is meant to be used whenever a value object is needed.
+//
+// 	An object that contains attributes but has no conceptual identity. They should be treated as immutable
+package value
 
-type Channel struct {
+// ValueObject an object that contains attributes but has no conceptual identity.
+// They should be treated as immutable
+//	This could be an abstract class with generics
+type ValueObject interface {
+	Get() interface{}
+	Set(value interface{}) error
+	IsValid() error
+
+	SetFieldName(field string)
+	GetFieldName() string
 }
